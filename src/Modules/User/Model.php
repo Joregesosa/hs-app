@@ -26,6 +26,9 @@ class Model extends Eloquent
         'password',
         'role_id',
     ];
+
+    protected $appends = ['full_name'];
+
     public function role(): BelongsTo
     {
         return $this->belongsTo('App\Modules\Role\Model');
@@ -34,5 +37,12 @@ class Model extends Eloquent
     public function schools(): BelongsToMany
     {
         return $this->belongsToMany(School::class, 'school_user', 'user_id', 'school_id');
+    }
+
+    // include full name attribute in the model
+
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->f_name} {$this->m_name} {$this->f_lastname} {$this->s_lastname}";
     }
 }
