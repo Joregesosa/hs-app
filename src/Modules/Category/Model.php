@@ -8,4 +8,5 @@ class Model extends Eloquent
 {
     protected $table = 'categories';
     protected $fillable = ['name'];
+    protected $hidden = ['created_at', 'updated_at'];
 }
