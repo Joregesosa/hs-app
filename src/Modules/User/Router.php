@@ -2,7 +2,6 @@
 
 use App\Modules\User\Controller;
 
-
 $router->get('/users', Controller::class . '@index');
 $router->get('/users/{id}', Controller::class . '@show');
 $router->post('/users', Controller::class . '@store');
