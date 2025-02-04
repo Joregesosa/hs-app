@@ -2,6 +2,7 @@
 
 namespace App\Modules\Category;
 
+use App\Middlewares\RoleAccess;
 use App\Modules\Category\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -34,6 +35,7 @@ class Controller
     public function store()
     {
         try {
+            RoleAccess::admin();
             $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $category = Model::create($_POST);
             header("HTTP/1.0 201 Created");
@@ -47,6 +49,7 @@ class Controller
     public function update($id)
     {
         try {
+            RoleAccess::admin();
             $category = Model::findOrFail($id);
             $category->update($_POST);
             header("HTTP/1.0 200 OK");
@@ -60,6 +63,7 @@ class Controller
     public function destroy($id)
     {
         try {
+            RoleAccess::admin();
             $category = Model::findOrFail($id);
             $category->delete();
             echo json_encode(['status' => 'success', 'message' => 'User deleted successfully']);

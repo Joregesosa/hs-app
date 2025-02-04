@@ -32,40 +32,5 @@ class Controller
         }
     }
 
-    public function store()
-    {
-        try {
-            $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $role = Model::create($_POST);
-            header("HTTP/1.0 201 Created");
-            echo json_encode($role);
-        } catch (\Throwable $th) {
-            header("HTTP/1.0 500 Internal Server Error");
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function update($id)
-    {
-        try {
-            $role = Model::findOrFail($id);
-            $role->update($_POST);
-            header("HTTP/1.0 200 OK");
-            echo json_encode($role);
-        } catch (ModelNotFoundException $th) {
-            header("HTTP/1.0 404 Internal Server Error");
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function destroy($id)
-    {
-        try {
-            $role = Model::findOrFail($id);
-            $role->delete();
-            echo json_encode(['status' => 'success', 'message' => 'role deleted successfully']);
-        } catch (ModelNotFoundException $th) {
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
+    
 }
