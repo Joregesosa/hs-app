@@ -16,6 +16,7 @@ class Model extends Eloquent
         'evidence',
         'comment',
         'description',
+        'status',
     ];
     protected $hidden = ['category_id', 'user_id', 'reviewer_id'];
     protected $appends = ['status_name'];
