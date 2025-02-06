@@ -10,19 +10,19 @@ DB::initialize();
 
 $router->options('/.*', function() {
     header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
     exit;
 });
 
-$router->before('GET|POST|PUT|DELETE', '/.*', function () {
+$router->before('GET|POST|PUT|PATCH|DELETE', '/.*', function () {
     header('Content-Type: application/json');
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
 });
 
-$router->before('POST|PUT', '/.*', function () {
+$router->before('POST|PUT|PATCH', '/.*', function () {
     if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
         $body = file_get_contents('php://input');
         $body = json_decode($body, true);
@@ -30,7 +30,7 @@ $router->before('POST|PUT', '/.*', function () {
     }
 });
 
-$router->before('GET|POST|PUT|DELETE', '/(?!auth|evidence).*', VerifyToken::class . '@handle');
+$router->before('GET|POST|PUT|DELETE|PATCH', '/(?!auth).*', VerifyToken::class . '@handle');
 
 require 'src/Modules/Auth/Router.php';
 require 'src/Modules/User/Router.php';
