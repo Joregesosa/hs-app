@@ -10,7 +10,8 @@
         "respect/validation": "^2.4",
         "nesbot/carbon": "^3.8",
         "bramus/router": "^1.6",
-        "fakerphp/faker": "^1.24"
+        "fakerphp/faker": "^1.24",
+        "google/apiclient": "^2.0"
     },
     "license": "mit",
     "autoload": {
