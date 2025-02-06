@@ -23,15 +23,14 @@ $router->before('GET|POST|PUT|DELETE', '/.*', function () {
 });
 
 $router->before('POST|PUT', '/.*', function () {
-    $body = file_get_contents('php://input');
-    $body = json_decode($body, true);
-    $_POST = $body;
+    if (strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
+        $body = file_get_contents('php://input');
+        $body = json_decode($body, true);
+        $_POST = $body;
+    }
 });
 
-// Middleware to verify token for all routes except auth routes
-$router->before('GET|POST|PUT|DELETE', '/(?!auth).*', function () {
-    VerifyToken::handle();
-});
+$router->before('GET|POST|PUT|DELETE', '/(?!auth|evidence).*', VerifyToken::class . '@handle');
 
 require 'src/Modules/Auth/Router.php';
 require 'src/Modules/User/Router.php';
