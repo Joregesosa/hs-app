@@ -15,7 +15,7 @@ class GoogleDrive
         try {
             $this->client = new Client();
             $root = $_SERVER['DOCUMENT_ROOT'];
-            $this->client->setAuthConfig($root . '/apikey.json');;
+            $this->client->setAuthConfig($root . '/apikey.json');
             $this->client->addScope(Drive::DRIVE_FILE);
             $this->driveService = new Drive($this->client);
         } catch (\Throwable $th) {
@@ -26,10 +26,10 @@ class GoogleDrive
     function upload($file_path, $file_name, $file_type)
     {
         try {
-            
+
             $fileMetadata = new Drive\DriveFile(array(
                 'name' => $file_name,
-                'parents' => array('1A4pgn3RfoG1sJtrZFG83FP1jXtDV6O5y')
+                'parents' => array($_ENV['GOOGLE_DRIVE_FOLDER_ID'])
             ));
             $content = file_get_contents($file_path);
 
@@ -39,8 +39,31 @@ class GoogleDrive
                 'uploadType' => 'multipart',
                 'fields' => 'id',
             ));
-            printf("File ID: %s\n", $file->id);
             return $file->id;
+        } catch (\Google\Exception $e) {
+            echo "Error Message: " . $e;
+        }
+    }
+
+    function download($file_id)
+    {
+        try {
+
+            $response = $this->driveService->files->get($file_id, array(
+                'alt' => 'media'
+            ));
+            $content = $response->getBody()->getContents();
+            return $content;
+        } catch (\Google\Exception $e) {
+            echo "Error Message: " . $e;
+        }
+    }
+
+    function delete($file_id)
+    {
+        try {
+            $this->driveService->files->delete($file_id);
+            return true;
         } catch (\Google\Exception $e) {
             echo "Error Message: " . $e;
         }

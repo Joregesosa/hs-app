@@ -6,9 +6,10 @@ use App\Services\GoogleDrive;
 
 class FileUpload
 {
-    public static function upload($file, $path)
+    public static function upload($file)
     {
         try {
+
             // Check for upload errors
             if ($file['error'] !== UPLOAD_ERR_OK) {
                 throw new \Exception('File upload error. Code: ' . $file['error']);
