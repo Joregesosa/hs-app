@@ -12,13 +12,13 @@ class Migration
         Capsule::schema()->create('services', function (Blueprint $table) {
             $table->id();
             $table->integer('amount_reported');
-            $table->integer('amount_approved');
+            $table->integer('amount_approved')->nullable();
             $table->string('evidence');
-            $table->text('description');
-            $table->text('comment');
-            $table->tinyInteger('status');
+            $table->text('description')->nullable();
+            $table->text('comment')->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('reviewer_id');
+            $table->unsignedBigInteger('reviewer_id')->nullable();
             $table->unsignedBigInteger('category_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('reviewer_id')->references('id')->on('users');

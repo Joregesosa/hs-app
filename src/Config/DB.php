@@ -1,11 +1,13 @@
 <?php 
 
 namespace App\Config;
-
+use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DB {
     public static function initialize() {
+        $dotenv = Dotenv::createImmutable(__DIR__ . "/../../");
+        $dotenv->load();
         $capsule = new Capsule;
         $capsule->addConnection([
             'driver'    => $_ENV['DB_DRIVER'],
