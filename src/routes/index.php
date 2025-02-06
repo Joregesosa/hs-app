@@ -23,7 +23,7 @@ $router->before('GET|POST|PUT|DELETE', '/.*', function () {
 });
 
 $router->before('POST|PUT', '/.*', function () {
-    if (strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
+    if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
         $body = file_get_contents('php://input');
         $body = json_decode($body, true);
         $_POST = $body;
