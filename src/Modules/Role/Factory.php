@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Roles;
+namespace App\Modules\Role;
 
 use Faker\Factory as FakerFactory;
 
