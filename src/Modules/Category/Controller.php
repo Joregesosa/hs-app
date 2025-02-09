@@ -4,6 +4,7 @@ namespace App\Modules\Category;
 
 use App\Middlewares\RoleAccess;
 use App\Modules\Category\Model;
+use App\Utils\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Controller
@@ -36,7 +37,8 @@ class Controller
     {
         try {
             RoleAccess::admin();
-            $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $required = ['name', 'description'];
+            Validator::required($_POST, $required);
             $category = Model::create($_POST);
             header("HTTP/1.0 201 Created");
             echo json_encode($category);

@@ -14,10 +14,15 @@ class Controller
         try {
 
             $user = Model::where('email', $_POST['email'])->first();
+            if (!$user) {
+                header("HTTP/1.0 401 Unauthorized");
+                echo json_encode(['status' => 'error', 'message' => 'Invalid credentials']);
+                return;
+            }
             $user->load('role');
             if ($user && password_verify($_POST['password'], $user->password)) {
                 $key = $_ENV['JWT_SECRET'];
-               
+
                 $payload = [
                     'iss' => 'http://localhost',
                     'user' => $user->id,
@@ -27,11 +32,10 @@ class Controller
                 ];
 
                 $jwt = JWT::encode($payload, $key, 'HS256');
-                
+
                 header("HTTP/1.0 200 OK");
                 setcookie('token', $jwt, $payload['exp'], '/', '', false, true);
                 echo json_encode(['message' => 'Login successful']);
-                
             } else {
                 header("HTTP/1.0 401 Unauthorized");
                 echo json_encode(['status' => 'error', 'message' => 'Invalid credentials']);

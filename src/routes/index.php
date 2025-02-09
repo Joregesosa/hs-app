@@ -8,6 +8,8 @@ $router = new Router();
 
 DB::initialize();
 
+$router->setBasePath('/api/v1');
+
 $router->options('/.*', function() {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
