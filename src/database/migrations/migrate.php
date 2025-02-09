@@ -25,6 +25,11 @@ function runMigrations($action)
 {
     global $migrations;
 
+    // if action is down, reverse the order of migrations
+    if ($action === "down") {
+        $migrations = array_reverse($migrations);
+    }
+
     foreach ($migrations as $migration => $class) {
         executeMigration($class, $action);
     }
