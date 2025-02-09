@@ -46,6 +46,46 @@ class Controller
         }
     }
 
+    public function profile()
+    {
+        try {
+            $user = Model::findOrFail($_REQUEST['auth']['user'])->load(['role', 'schools']);
+            header("HTTP/1.0 200 OK");
+            echo json_encode($user);
+        } catch (ModelNotFoundException $th) {
+            header("HTTP/1.0 404 Not Found");
+            echo json_encode($th->getMessage());
+        }
+    }
+
+    public function updatePassword()
+    {
+        try {
+            $user = Model::findOrFail($_REQUEST['auth']['user']);
+
+            if (!password_verify($_POST['old_password'], $user->password)) {
+
+
+                header("HTTP/1.0 401 Unauthorized");
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Invalid old password',
+                    'verify' => password_verify($_POST['old_password'], $user->password)
+                ]);
+                return;
+            }
+
+            $user->password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+            $user->save();
+
+            header("HTTP/1.0 200 OK");
+            echo json_encode(['status' => 'success', 'message' => 'Password updated successfully']);
+        } catch (ModelNotFoundException $th) {
+            header("HTTP/1.0 404 Not Found");
+            echo json_encode($th->getMessage());
+        }
+    }
+
     public function logout()
     {
         setcookie('token', '', time() - 3600, '/', '', false, true);
