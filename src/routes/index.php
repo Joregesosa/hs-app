@@ -41,5 +41,6 @@ require 'src/Modules/School/Router.php';
 require 'src/Modules/Country/Router.php';
 require 'src/Modules/Category/Router.php';
 require 'src/Modules/Service/Router.php';
+require 'src/Modules/Student/Router.php';
 
 $router->run();

@@ -4,6 +4,7 @@ namespace App\Modules\School;
 
 use App\Middlewares\RoleAccess;
 use App\Modules\School\Model;
+use App\Utils\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Controller
@@ -36,10 +37,11 @@ class Controller
     {
         try {
             RoleAccess::admin();
-            $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $school = Model::create($_POST);
+            $required = ['name'];
+            Validator::required($_POST, $required);
             header("HTTP/1.0 201 Created");
-            echo json_encode($school);
+            echo json_encode(['status' => 'success', 'message' => 'School created successfully']);
         } catch (\Throwable $th) {
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
@@ -53,7 +55,7 @@ class Controller
             $school = Model::findOrFail($id);
             $school->update($_POST);
             header("HTTP/1.0 200 OK");
-            echo json_encode($school);
+            echo json_encode(['status' => 'success', 'message' => 'School updated successfully']);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
