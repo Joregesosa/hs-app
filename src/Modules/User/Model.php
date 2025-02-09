@@ -19,12 +19,12 @@ class Model extends Eloquent
         's_lastname',
         'email',
         'password',
+        'role_id',
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
         'password',
-        'role_id',
     ];
 
     protected $appends = ['full_name'];
