@@ -41,7 +41,7 @@ class Controller
             Validator::required($_POST, $required);
             $category = Model::create($_POST);
             header("HTTP/1.0 201 Created");
-            echo json_encode($category);
+            echo json_encode(['status' => 'success', 'message' => 'Category created successfully']);
         } catch (\Throwable $th) {
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
@@ -55,7 +55,7 @@ class Controller
             $category = Model::findOrFail($id);
             $category->update($_POST);
             header("HTTP/1.0 200 OK");
-            echo json_encode($category);
+            echo json_encode(['status' => 'success', 'message' => 'Category updated successfully']);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
