@@ -48,7 +48,8 @@ class RoleAccess
 
     public static function notStudent()
     {
-        $role = (array) $_REQUEST['auth']['role'];
+        $role = ((array) $_REQUEST['auth']['role'])['name'];
+ 
         if ($role === 'Student') {
             header("HTTP/1.0 403 Forbidden");
             echo json_encode([
