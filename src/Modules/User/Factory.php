@@ -17,8 +17,10 @@ class Factory
                 'f_lastname' => $faker->lastName(),
                 's_lastname' => $faker->lastName(),
                 'email' => $faker->email(),
+                'phone' => $faker->phoneNumber(),
+                'status' => $faker->numberBetween(0, 1),
                 'role_id' => $faker->numberBetween(1, 4),
-                'password' => password_hash(123456, PASSWORD_DEFAULT),
+                'password' => password_hash('123456', PASSWORD_DEFAULT),
             ];
         }
         return $users;

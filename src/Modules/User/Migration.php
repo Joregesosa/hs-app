@@ -17,7 +17,9 @@ class Migration
             $table->string('f_lastname');
             $table->string('s_lastname')->nullable();
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
             $table->string('password');
+            $table->boolean('status')->default(1);
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')->references('id')->on('roles');
             $table->timestamps();

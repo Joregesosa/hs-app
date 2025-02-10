@@ -3,19 +3,26 @@
 namespace App\Modules\User;
 
 use App\Modules\User\Model;
+use App\Modules\Student\Model as Student;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Middlewares\RoleAccess;
+use App\Utils\Validator;
 
 class Controller
 {
     public function index()
     {
         try {
-            RoleAccess::admin();
+            RoleAccess::notStudent();
+            if(isset($_GET['r'])){
+                $users = Model::where('role_id', $_GET['r'])->get()->load('role');
+                header("HTTP/1.0 200 OK");
+                echo json_encode($users);
+                return;
+            }
             $users = Model::all()->load('role');
             header("HTTP/1.0 200 OK");
             echo json_encode($users);
-
         } catch (\Throwable $th) {
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
@@ -38,12 +45,37 @@ class Controller
     public function store()
     {
         try {
+            // begin transaction
+            Model::getConnectionResolver()->connection()->beginTransaction();
             RoleAccess::admin();
+
+            $required = ['f_name', 'f_lastname', 'email', 'password', 'role_id', 'schools'];
+            if ($_POST['role_id'] === 4) {
+                $required[] = 'controller_id';
+                $required[] = 'recruiter_id';
+                $required[] = 'country_id';
+            }
+
+            Validator::required($_POST, $required);
+            $this->create_user_validation();
+
             $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $user = Model::create($_POST);
+            $user->schools()->attach($_POST['schools']);
+            if ($_POST['role_id'] === 4) {
+                Student::create([
+                    'user_id' => $user->id,
+                    'controller_id' => $_POST['controller_id'],
+                    'recruiter_id' => $_POST['recruiter_id'],
+                    'country_id' => $_POST['country_id'],
+                ]);
+            }
+
+            Model::getConnectionResolver()->connection()->commit();
             header("HTTP/1.0 201 Created");
-            echo json_encode($user);
+            echo json_encode(['status' => 'success', 'message' => 'User created successfully']);
         } catch (\Throwable $th) {
+            Model::getConnectionResolver()->connection()->rollBack();
             header("HTTP/1.0 500 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
         }
@@ -55,8 +87,9 @@ class Controller
             RoleAccess::adminOrOwner($id);
             $user = Model::findOrFail($id);
             $user->update($_POST);
+            $user->save();
             header("HTTP/1.0 200 OK");
-            echo json_encode($user);
+            echo json_encode(['status' => 'success', 'message' => 'User updated successfully']);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Internal Server Error");
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
@@ -68,10 +101,44 @@ class Controller
         try {
             RoleAccess::admin();
             $user = Model::findOrFail($id);
-            $user->delete();
+            $user->status = 0;
+            $user->save();
             echo json_encode(['status' => 'success', 'message' => 'User deleted successfully']);
         } catch (ModelNotFoundException $th) {
             echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+    }
+
+    public  function create_user_validation()
+    {
+        if (Model::where('email', $_POST['email'])->exists()) {
+            header("HTTP/1.0 400 Bad Request");
+            echo json_encode(['status' => 'error', 'message' => 'Email already exists']);
+            exit;
+        }
+
+        if (!is_array($_POST['schools'])) {
+            header("HTTP/1.0 400 Bad Request");
+            echo json_encode(['status' => 'error', 'message' => 'Schools must be an array']);
+            exit;
+        }
+
+        if ($_POST['role_id'] !== 1 && count($_POST['schools']) < 1) {
+            header("HTTP/1.0 400 Bad Request");
+            echo json_encode(['status' => 'error', 'message' => 'At least one school is required']);
+            exit;
+        }
+
+        if ($_POST['role_id'] === 1 && count($_POST['schools']) > 0) {
+            header("HTTP/1.0 400 Bad Request");
+            echo json_encode(['status' => 'error', 'message' => 'Admins cannot be assigned to schools']);
+            exit;
+        }
+
+        if ($_POST['role_id'] === 4 && count($_POST['schools']) > 1) {
+            header("HTTP/1.0 400 Bad Request");
+            echo json_encode(['status' => 'error', 'message' => 'Students can only be assigned to one school']);
+            exit;
         }
     }
 }
