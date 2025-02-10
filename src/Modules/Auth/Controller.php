@@ -49,7 +49,13 @@ class Controller
     public function profile()
     {
         try {
-            $user = Model::findOrFail($_REQUEST['auth']['user'])->load(['role', 'schools']);
+            $user = Model::findOrFail($_REQUEST['auth']['user']);
+            $user->load('role');
+
+            if($user->role->name === 'Student'){
+                $user->load('student.country', 'student.controller', 'student.recruiter');
+            }
+            
             header("HTTP/1.0 200 OK");
             echo json_encode($user);
         } catch (ModelNotFoundException $th) {
