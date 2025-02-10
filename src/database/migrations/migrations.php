@@ -7,4 +7,5 @@ $migrations = [
     "Users" => "App\Modules\User\Migration",
     "Services" => "App\Modules\Service\Migration",
     "SchoolUsers" => "App\Modules\SchoolUser\Migration",
+    "Students" => "App\Modules\Student\Migration",
 ];

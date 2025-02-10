@@ -8,4 +8,5 @@ $factories = [
     "users" => "App\Modules\User\Factory",
     "services" => "App\Modules\Service\Factory",
     "school_user" => "App\Modules\SchoolUser\Factory",
+    "students" => "App\Modules\Student\Factory",
 ];
