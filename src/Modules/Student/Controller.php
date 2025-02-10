@@ -36,7 +36,7 @@ class Controller
     {
         try {
             RoleAccess::adminOrOwner($id);
-            $user = Model::findOrFail($id)->load(['role', 'schools', 'services']);
+            $user = Model::findOrFail($id)->load(['role', 'schools', 'services','student.country', 'student.controller', 'student.recruiter']);
             if($user->role->id != 4){
                 throw new ModelNotFoundException('Student not Found');
             }
