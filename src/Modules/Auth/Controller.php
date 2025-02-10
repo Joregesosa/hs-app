@@ -50,7 +50,7 @@ class Controller
     {
         try {
             $user = Model::findOrFail($_REQUEST['auth']['user']);
-            $user->load('role');
+            $user->load('role', 'schools');
 
             if($user->role->name === 'Student'){
                 $user->load('student.country', 'student.controller', 'student.recruiter');
