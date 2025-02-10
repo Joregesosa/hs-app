@@ -63,7 +63,7 @@ class Controller
     public function store()
     {
         try {
-            RoleAccess::student($_REQUEST['auth']['role']);
+            RoleAccess::student();
             $data = $_POST;
             $data['user_id'] = $_REQUEST['auth']['user'];
             if (!isset($_FILES['evidence'])) {
@@ -170,7 +170,8 @@ class Controller
             Validator::required($data, $required);
 
             $service = Model::findOrFail($id);
-            if($service->status !== 0){
+ 
+            if($service->status !== 'Pending'){
                 header("HTTP/1.0 400 Bad Request");
                 echo json_encode(['status' => 'error', 'message' => 'Service has already been reviewed']);
                 exit();
