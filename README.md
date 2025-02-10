@@ -389,6 +389,89 @@ En caso de que haya un error en la solicitud, el servidor responderá con un men
 }
 ```
 
+## Module Roles 
+### Listar Roles
+
+Este módulo permite listar y ver roles específicos. Hay 4 roles disponibles: Admin, Student, Recruiter, Controller.
+
+Los Controllers y Los recruiter solo tienen acceso a ver la lista de estudiantes y sus horas de servicio cuando inician session en plataforma. 
+
+#### Endpoint:
+Ruta: `api/v1/roles`
+Roles: `Admin, Student`
+Method: `GET`
+
+Este endpoint permite listar todos los roles disponibles en el sistema. Es útil para obtener una visión general de los diferentes roles y sus permisos asociados.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud.
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde con un arreglo que contiene todos los roles en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+[
+    {
+        "id": 1,
+        "name": "Admin"
+    },
+    {
+        "id": 2,
+        "name": "Student"
+    },
+    {
+        "id": 3,
+        "name": "Recruiter"
+    },
+    {
+        "id": 4,
+        "name": "Controller"
+    }
+]
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+    "status": "error",
+    "message": "Error message"
+}
+```
+
+### Mostrar un Role
+
+#### Endpoint:
+Ruta: `api/v1/roles/1`
+Roles: `Admin, Student`
+Method: `GET`
+
+#### Descripción:
+Este endpoint permite obtener la información de un rol específico identificado por su ID.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud.
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde con un objeto que contiene el role especificado formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+
+{
+    "id": 2,
+    "name": "Student"
+},
+
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+    "status": "error",
+    "message": "Error message"
+}
+```
+
+
+
+
+
+
 
 
 
