@@ -19,7 +19,7 @@ class Model extends Eloquent
         'status',
     ];
     protected $hidden = ['category_id', 'user_id', 'reviewer_id'];
-    protected $appends = ['status_name'];
+    protected $appends = ['status'];
     public function category(): BelongsTo
     {
         return $this->belongsTo('App\Modules\Category\Model');
@@ -35,7 +35,7 @@ class Model extends Eloquent
         return $this->belongsTo('App\Modules\User\Model');
     }
 
-    public function getStatusNameAttribute(): string
+    public function getStatusAttribute(): string
     {
         $status = $this->attributes['status'];
         $statusName = '';
@@ -52,4 +52,5 @@ class Model extends Eloquent
         }
         return $statusName;
     }
+ 
 }

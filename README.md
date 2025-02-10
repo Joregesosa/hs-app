@@ -467,8 +467,145 @@ En caso de que haya un error en la solicitud, el servidor responderá con un men
 }
 ```
 
+## Module Services 
+ 
+### Lista de Servicios
+#### Endpoint:
+Ruta: `api/v1/services`  
+Roles: `Admin o Estudiantes`  
+Query: `/api/v1/services/?status= 0 or 1 or 2 or  &&user=user_id`
+Method: `GET`
 
+#### Descripción:
+Este endpoint permite a los administradores y estudiantes obtener una lista de todos los servicios disponibles en el sistema. Los servicios representan las actividades o tareas que los estudiantes pueden realizar y reportar sus horas de servicio.
 
+El query param es opcional para filtrar las solicitudes, en caso de que no se facilite ningun parametro, todas los servicios seran retornados.
+
+##### Estados
+**Pending:** 0
+**Approved:** 1
+**Rejected:** 2
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud.
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde con un arreglo que contiene todos los servicios en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+[
+     {
+        "id": 2,
+        "amount_reported": 12,
+        "amount_approved": 15,
+        "evidence": "https://via.placeholder.com/640x480.png/00ff55?text=rerum",
+        "description": "Quidem pariatur cumque dolores modi nihil odit nisi. Sit amet consectetur fuga autem ratione non voluptatem. Impedit architecto blanditiis voluptatibus qui consequatur corrupti.",
+        "comment": "Est voluptas modi fuga omnis vitae ut enim tempora. Sit sequi quam ab quo quibusdam. Rerum culpa velit sed. Quas enim rem qui et vitae. Soluta eius consequatur quia ut laudantium.",
+        "status": "Approved",
+        "created_at": "2025-02-09T20:10:13.000000Z",
+        "updated_at": "2025-02-09T20:10:13.000000Z",
+        "category": {
+            "id": 2,
+            "name": "LemonChiffon",
+            "description": "Quisquam tenetur deserunt est."
+        },
+        "user": {
+            "id": 2,
+            "f_name": "Brianne",
+            "m_name": "Adrien",
+            "f_lastname": "Schroeder",
+            "s_lastname": "Waelchi",
+            "email": "walsh.elfrieda@gibson.com",
+            "phone": "+1 (351) 948-6482",
+            "status": "inactivo",
+            "role_id": 4,
+            "full_name": "Brianne Adrien Schroeder Waelchi"
+        },
+        "reviewer": {
+            "id": 4,
+            "f_name": "Abdul",
+            "m_name": "Laurine",
+            "f_lastname": "VonRueden",
+            "s_lastname": "Dicki",
+            "email": "beier.lizzie@king.org",
+            "phone": "812-381-0062",
+            "status": "activo",
+            "role_id": 3,
+            "full_name": "Abdul Laurine VonRueden Dicki"
+        }
+    }
+]
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+    "status": "error",
+    "message": "Error message"
+}
+```
+### Mostrar un Servicio
+#### Endpoint:
+Ruta: `api/v1/services/1`  
+Roles: `Admin o Estudiantes`  
+Method: `GET`
+
+#### Descripción:
+Este endpoint permite a los administradores y estudiantes obtener un servicio especificado por su id. Los servicios representan las actividades o tareas que los estudiantes pueden realizar y reportar sus horas de servicio.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud.
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde con un arreglo que contiene todos los servicios en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+
+{
+        "id": 2,
+        "amount_reported": 12,
+        "amount_approved": 15,
+        "evidence": "https://via.placeholder.com/640x480.png/00ff55?text=rerum",
+        "description": "Quidem pariatur cumque dolores modi nihil odit nisi. Sit amet consectetur fuga autem ratione non voluptatem. Impedit architecto blanditiis voluptatibus qui consequatur corrupti.",
+        "comment": "Est voluptas modi fuga omnis vitae ut enim tempora. Sit sequi   quam ab quo quibusdam. Rerum culpa velit sed. Quas enim rem qui et vitae. Soluta eius consequatur quia ut laudantium.",
+        "status": "Approved",
+        "created_at": "2025-02-09T20:10:13.000000Z",
+        "updated_at": "2025-02-09T20:10:13.000000Z",
+        "category": {
+            "id": 2,
+            "name": "LemonChiffon",
+            "description": "Quisquam tenetur deserunt est."
+        },
+        "user": {
+            "id": 2,
+            "f_name": "Brianne",
+            "m_name": "Adrien",
+            "f_lastname": "Schroeder",
+            "s_lastname": "Waelchi",
+            "email": "walsh.elfrieda@gibson.com",
+            "phone": "+1 (351) 948-6482",
+            "status": "inactivo",
+            "role_id": 4,
+            "full_name": "Brianne Adrien Schroeder Waelchi"
+        },
+        "reviewer": {
+            "id": 4,
+            "f_name": "Abdul",
+            "m_name": "Laurine",
+            "f_lastname": "VonRueden",
+            "s_lastname": "Dicki",
+            "email": "beier.lizzie@king.org",
+            "phone": "812-381-0062",
+            "status": "activo",
+            "role_id": 3,
+            "full_name": "Abdul Laurine VonRueden Dicki"
+        }
+}
+
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+    "status": "error",
+    "message": "Error message"
+}
+```
 
 
 
