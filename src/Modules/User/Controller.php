@@ -13,8 +13,17 @@ class Controller
     public function index()
     {
         try {
-            RoleAccess::notStudent();
-            if(isset($_GET['r'])){
+            RoleAccess::adminOrStudent();
+            $role = (array) $_REQUEST['auth']['role']; 
+
+            if($role['name'] === 'Student' && !isset($_GET['r'])){
+                header("HTTP/1.0 400 Bad Request");
+                echo json_encode(['status' => 'error', 'message' => 'Role is required', 'options' => ['r' => '2 or 3']]);
+                return;
+            }
+
+
+            if(isset($_GET['r']) && ($_GET['r'] === '2' || $_GET['r'] === '3')){
                 $users = Model::where('role_id', $_GET['r'])->get()->load('role');
                 header("HTTP/1.0 200 OK");
                 echo json_encode($users);
@@ -38,7 +47,7 @@ class Controller
             echo json_encode($user);
         } catch (ModelNotFoundException $th) {
             header("HTTP/1.0 404 Not Found");
-            echo json_encode($th->getMessage());
+            echo json_encode(['status' => 'error', 'message' => 'User not found']);
         }
     }
 

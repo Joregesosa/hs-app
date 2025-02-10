@@ -32,7 +32,7 @@ $router->before('POST|PUT|PATCH', '/.*', function () {
     }
 });
 
-$router->before('GET|POST|PUT|DELETE|PATCH', '/(?!login).*', VerifyToken::class . '@handle');
+$router->before('GET|POST|PUT|DELETE|PATCH', '/(?!auth/login).*', VerifyToken::class . '@handle');
 
 require 'src/Modules/Auth/Router.php';
 require 'src/Modules/User/Router.php';

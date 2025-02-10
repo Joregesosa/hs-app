@@ -33,6 +33,21 @@ class RoleAccess
         }
     }
 
+    public static function adminOrStudent()
+    {
+        $role = (array) $_REQUEST['auth']['role'];
+        $user =  intval($_REQUEST['auth']['user']);
+
+        if ($role['name'] !== 'Admin' && $role['name'] !== 'Student') {
+            header("HTTP/1.0 403 Forbidden");
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'You do not have permission to access this resource'
+            ]);
+            exit();
+        }
+    }
+
     public static function student()
     {
         $role = (array) $_REQUEST['auth']['role'];
@@ -49,7 +64,7 @@ class RoleAccess
     public static function notStudent()
     {
         $role = ((array) $_REQUEST['auth']['role'])['name'];
- 
+
         if ($role === 'Student') {
             header("HTTP/1.0 403 Forbidden");
             echo json_encode([
@@ -58,6 +73,5 @@ class RoleAccess
             ]);
             exit();
         }
-         
     }
 }

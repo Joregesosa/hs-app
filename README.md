@@ -178,3 +178,137 @@ Si la solicitud es exitosa, el servidor responde con un mensaje de éxito en for
 }
 ``` 
 
+## Usuarios 
+### Listar usuarios
+
+#### Endpoint:
+Ruta: `api/v1/auth/users`
+Query:  `api/v1/auth/users?r=1 or 2 or 3` 
+Roles: `Admin or Students`
+Method: `GET`
+
+Esta enspoint se encarga de listar todos los usuarios registrados en el sistema. Realiza una consulta a la base de datos para obtener la información de cada usuario y la devuelve en un formato estructurado. Es útil para mostrar un resumen de los usuarios existentes y sus detalles relevantes.
+
+Aceptar query params que te permiten filtrar segun el rol si ningun rol es facilitado devolvera todos los usuarios. 
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud:
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde con un mensaje de éxito en formato JSON. La estructura de la respuesta es la siguiente:
+
+```JSON
+[
+    {
+        "id": 1,
+        "f_name": "Osvaldo",
+        "m_name": "Minerva",
+        "f_lastname": "Lueilwitz",
+        "s_lastname": "Lebsack",
+        "email": "imclaughlin@blanda.net",
+        "phone": "361.857.2775",
+        "status": "activo",
+        "role_id": 1,
+        "full_name": "Osvaldo Minerva Lueilwitz Lebsack",
+        "role": {
+            "id": 1,
+            "name": "Admin"
+        }
+    },
+]
+```
+En el caso de los estudiantes, es obligatorio incluir el parámetro `?r=role_id` en la petición.
+
+**Nota:** Los usuarios con roles de **Controllers** y **Recruiters** no pueden acceder a esta información.
+
+### Mostrar un usuario
+
+#### Endpoint:
+Ruta: `api/v1/auth/users/id`
+Method: `GET`
+Roles: `Admin`
+
+#### Descripción:
+Este endpoint permite a los administradores obtener la información detallada de un usuario específico utilizando su identificador único.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud y proporcionar el `user_id` en la ruta.
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde con la información del usuario en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+{
+        "id": 1,
+        "f_name": "Osvaldo",
+        "m_name": "Minerva",
+        "f_lastname": "Lueilwitz",
+        "s_lastname": "Lebsack",
+        "email": "imclaughlin@blanda.net",
+        "phone": "361.857.2775",
+        "status": "activo",
+        "role_id": 1,
+        "full_name": "Osvaldo Minerva Lueilwitz Lebsack",
+        "role": {
+            "id": 1,
+            "name": "Admin"
+        }
+    }
+```
+En caso de que el usuario con el `user_id` especificado no sea encontrado, el servidor responderá con un mensaje de error indicando que el usuario no fue encontrado.
+```JSON
+{
+    "status": "error",
+    "message": "User not found"
+}
+```
+ 
+### Crear Usuario
+
+#### Endpoint:
+Ruta: `api/v1/auth/users`
+Method: `POST`
+Roles: `Admin`
+
+
+#### Descripción:
+Este endpoint permite a los administradores crear un nuevo usuario en el sistema proporcionando la información necesaria en el cuerpo de la solicitud.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud y proporcionar los datos del usuario en formato JSON. La estructura de la solicitud es la siguiente:
+```JSON
+{
+    "f_name": "Luffy",
+    "s_name": "",
+    "f_lastname": "D.",
+    "s_lastname": "Monkey",
+    "email": "Raul@gmail.com",
+    "password": "123456",
+    "role_id":4,
+    "controller_id": 2, // solo para estudiantes
+    "country_id": 4, // solo para estudiantes
+    "recruiter_id": 3, // solo para estudiantes
+    "schools": [  // cuando es un estudiantes solo puede tener una escuela asignada
+        3
+    ]// El administrador no tiene escuelas asignadas
+}
+```
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+{
+    "status": "success",
+    "message": "User created successfully"
+}
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+        "status": "error",
+        "message": "Error message"
+}
+```
+
+
+
+
