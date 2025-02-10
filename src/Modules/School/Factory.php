@@ -9,12 +9,14 @@ class Factory
     public static function create($count = 5)
     {
         $faker = FakerFactory::create();
-        $shools = [];
-        for ($i = 0; $i < $count; $i++) {
-            $shools[] = [
-                'name' => $faker->words(2, true),
-            ];
-        }
+        $shools = [
+            ['name' => 'Software'],
+            ['name' => 'Ingles'],
+            ['name' => 'Matematicas'],
+            ['name' => 'Redes'],
+            ['name' => 'Marketing Digital'],
+        ];
+         
         return $shools;
     }
 }
