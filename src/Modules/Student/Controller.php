@@ -13,8 +13,8 @@ class Controller
         try {
             RoleAccess::notStudent();
             $query = Model::query();
-            $query->where('role_id', 4);
-            // ->where('status', 1);
+            $query->where('role_id', 4)
+            ->where('status', 1);
 
             if (isset($_GET['s'])) {
                 $query->whereHas('schools', function ($q) {
