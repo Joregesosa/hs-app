@@ -178,12 +178,12 @@ Si la solicitud es exitosa, el servidor responde con un mensaje de éxito en for
 }
 ``` 
 
-## Usuarios 
+## Module Usuarios 
 ### Listar usuarios
 
 #### Endpoint:
-Ruta: `api/v1/auth/users`
-Query:  `api/v1/auth/users?r=1 or 2 or 3` 
+Ruta: `api/v1/users`
+Query:  `api/v1/users?r=1 or 2 or 3` 
 Roles: `Admin or Students`
 Method: `GET`
 
@@ -224,7 +224,7 @@ En el caso de los estudiantes, es obligatorio incluir el parámetro `?r=role_id`
 ### Mostrar un usuario
 
 #### Endpoint:
-Ruta: `api/v1/auth/users/id`
+Ruta: `api/v1/users/id`
 Method: `GET`
 Roles: `Admin`
 
@@ -265,7 +265,7 @@ En caso de que el usuario con el `user_id` especificado no sea encontrado, el se
 ### Crear Usuario
 
 #### Endpoint:
-Ruta: `api/v1/auth/users`
+Ruta: `api/v1/users`
 Method: `POST`
 Roles: `Admin`
 
@@ -282,7 +282,6 @@ El cliente debe enviar un token de autenticación en una cookie de la solicitud 
     "f_lastname": "D.",
     "s_lastname": "Monkey",
     "email": "Raul@gmail.com",
-    "password": "123456",
     "role_id":4,
     "controller_id": 2, // solo para estudiantes
     "country_id": 4, // solo para estudiantes
@@ -292,7 +291,7 @@ El cliente debe enviar un token de autenticación en una cookie de la solicitud 
     ]// El administrador no tiene escuelas asignadas
 }
 ```
-
+**Nota:** La contraseña tiene su propia area de actualizacion en /auth/change-password.
 #### Response:
 Si la solicitud es exitosa, el servidor responde en formato JSON. La estructura de la respuesta es la siguiente:
 ```JSON
@@ -306,6 +305,87 @@ En caso de que haya un error en la solicitud, el servidor responderá con un men
 {
         "status": "error",
         "message": "Error message"
+}
+```
+### Actualizar Usuario
+
+#### Endpoint:
+Ruta: `api/v1/users/1`
+Method: `PUT`
+Roles: `Admin y Owner`
+
+#### Descripción:
+Este endpoint permite a los administradores y propietarios actualizar la información de un usuario específico utilizando su identificador único. Los administradores pueden actualizar cualquier usuario, mientras que los propietarios solo pueden actualizar su propio perfil.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud y proporcionar los datos actualizados del usuario en formato JSON. La estructura de la solicitud es la siguiente:
+```JSON
+{
+    "f_name": "Luffy",
+    "s_name": "",
+    "f_lastname": "D.",
+    "s_lastname": "Monkey",
+    "email": "Raul@gmail.com",
+    "password": "123456",
+    "role_id": 4,
+    "controller_id": 2, // solo para estudiantes
+    "country_id": 4, // solo para estudiantes
+    "recruiter_id": 3, // solo para estudiantes
+    "schools": [  // cuando es un estudiante solo puede tener una escuela asignada
+        3
+    ] // El administrador no tiene escuelas asignadas
+}
+
+```
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+{
+    "status": "success",
+    "message": "User updated successfully"
+}
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+    "status": "error",
+    "message": "Error message"
+}
+```
+### Eliminar Usuario
+
+#### Endpoint:
+Ruta: `api/v1/users/1`
+Method: `DELETE`
+Roles: `Admin`
+
+### Eliminar Usuario (Borrado Lógico)
+
+#### Endpoint:
+Ruta: `api/v1/users/1`
+Method: `DELETE`
+Roles: `Admin`
+
+#### Descripción:
+Este endpoint permite a los administradores realizar un borrado lógico de un usuario específico utilizando su identificador único. En lugar de eliminar el usuario de la base de datos, se marca como eliminado.
+
+#### Request:
+El cliente debe enviar un token de autenticación en una cookie de la solicitud y proporcionar el `user_id` en la ruta.
+
+#### Response:
+Si la solicitud es exitosa, el servidor responde en formato JSON. La estructura de la respuesta es la siguiente:
+```JSON
+{
+    "status": "success",
+    "message": "User marked as deleted successfully"
+}
+```
+En caso de que haya un error en la solicitud, el servidor responderá con un mensaje de error indicando la causa del fallo.
+```JSON
+{
+    "status": "error",
+    "message": "Error message"
 }
 ```
 
