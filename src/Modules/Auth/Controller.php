@@ -35,7 +35,7 @@ class Controller
 
                 header("HTTP/1.0 200 OK");
                 setcookie('token', $jwt, $payload['exp'], '/', '', false, true);
-                echo json_encode(['message' => 'Login successful']);
+                echo json_encode(['status' => 'success', 'message' => 'Login successful']);
             } else {
                 header("HTTP/1.0 401 Unauthorized");
                 echo json_encode(['status' => 'error', 'message' => 'Invalid credentials']);
@@ -52,10 +52,10 @@ class Controller
             $user = Model::findOrFail($_REQUEST['auth']['user']);
             $user->load('role', 'schools');
 
-            if($user->role->name === 'Student'){
+            if ($user->role->name === 'Student') {
                 $user->load('student.country', 'student.controller', 'student.recruiter');
             }
-            
+
             header("HTTP/1.0 200 OK");
             echo json_encode($user);
         } catch (ModelNotFoundException $th) {
@@ -71,12 +71,10 @@ class Controller
 
             if (!password_verify($_POST['old_password'], $user->password)) {
 
-
                 header("HTTP/1.0 401 Unauthorized");
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'Invalid old password',
-                    'verify' => password_verify($_POST['old_password'], $user->password)
                 ]);
                 return;
             }
@@ -96,6 +94,6 @@ class Controller
     {
         setcookie('token', '', time() - 3600, '/', '', false, true);
         header("HTTP/1.0 200 OK");
-        echo json_encode(['message' => 'Logout successful']);
+        echo json_encode(['status' => 'success', 'message' => 'Logout successful']);
     }
 }

@@ -54,8 +54,7 @@ class Model extends Eloquent
     public function getFullNameAttribute(): string
     {
         return "{$this->f_name} {$this->m_name} {$this->f_lastname} {$this->s_lastname}";
-    }
-
+    } 
 
     public function getStatusAttribute(): string
     {
