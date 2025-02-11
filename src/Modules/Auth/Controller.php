@@ -34,7 +34,15 @@ class Controller
                 $jwt = JWT::encode($payload, $key, 'HS256');
 
                 header("HTTP/1.0 200 OK");
-                setcookie('token', $jwt, $payload['exp'], '/', '', false, true);
+                setcookie('token', $jwt, [
+                    'expires' => time() + 60 * 60,
+                    'path' => '/',
+                    'domain' => '',
+                    'secure' => true,
+                    'httponly' => true,
+                    'samesite' => 'none'
+                ]);
+              
                 echo json_encode(['status' => 'success', 'message' => 'Login successful']);
             } else {
                 header("HTTP/1.0 401 Unauthorized");

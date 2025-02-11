@@ -14,6 +14,7 @@ $router->options('/.*', function() {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    header('access-control-allow-credentials: true');
     exit;
 });
 
@@ -22,6 +23,7 @@ $router->before('GET|POST|PUT|PATCH|DELETE', '/.*', function () {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    header('access-control-allow-credentials: true');
 });
 
 $router->before('POST|PUT|PATCH', '/.*', function () {
