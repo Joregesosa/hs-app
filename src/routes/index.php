@@ -10,7 +10,7 @@ DB::initialize();
 
 $router->setBasePath('/api/v1');
 
-$router->options('/.*', function() {
+$router->options('/.*', function () {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -44,5 +44,9 @@ require 'src/Modules/Country/Router.php';
 require 'src/Modules/Category/Router.php';
 require 'src/Modules/Service/Router.php';
 require 'src/Modules/Student/Router.php';
+require 'src/Modules/GoalCategory/Router.php';
+require 'src/Modules/GoalSubcategory/Router.php';
+require 'src/Modules/Goal/Router.php';
+
 
 $router->run();
